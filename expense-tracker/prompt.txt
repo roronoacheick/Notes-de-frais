@@ -1,0 +1,45 @@
+Analyse cette image de justificatif de dépense professionnelle et extrais toutes les informations disponibles.
+ 
+Retourne UNIQUEMENT un objet JSON valide respectant exactement la structure suivante :
+ 
+{
+  "date": "YYYY-MM-DD",
+  "montant_ttc": 0.00,
+  "montant_ht": 0.00,
+  "tva": 0.00,
+  "devise": "EUR",
+  "categorie": "restaurant",
+  "fournisseur": "Nom du fournisseur",
+  "adresse_fournisseur": "Adresse complète",
+  "numero_document": "Numéro de ticket ou facture",
+  "mode_paiement": "carte",
+  "description": "Description courte de la dépense",
+  "note": null
+}
+ 
+## Détail des champs
+ 
+| Champ               | Type    | Format / Valeurs possibles                                              |
+|---------------------|---------|-------------------------------------------------------------------------|
+| date                | string  | Format ISO 8601 : "YYYY-MM-DD". Ex : "2025-06-03"                      |
+| montant_ttc         | number  | Montant total toutes taxes comprises, en nombre décimal. Ex : 24.50    |
+| montant_ht          | number  | Montant hors taxes, en nombre décimal. null si non indiqué             |
+| tva                 | number  | Montant de la TVA, en nombre décimal. null si non indiqué              |
+| devise              | string  | Code ISO 4217 à 3 lettres. Ex : "EUR", "USD", "GBP". Défaut : "EUR"   |
+| categorie           | string  | Une des valeurs : "restaurant", "transport", "hebergement",             |
+|                     |         | "carburant", "fournitures", "autre"                                     |
+| fournisseur         | string  | Nom de l'enseigne ou de l'entreprise émettrice du justificatif         |
+| adresse_fournisseur | string  | Adresse postale du fournisseur si visible. null sinon                  |
+| numero_document     | string  | Numéro de ticket, de facture ou de réservation. null si absent         |
+| mode_paiement       | string  | Une des valeurs : "carte", "especes", "virement", "autre", null        |
+| description         | string  | Courte description du contenu de la dépense (ex : "Déjeuner client")  |
+| note                | string  | Toute information utile non couverte par les autres champs. null sinon |
+ 
+## Règles strictes
+ 
+- Retourne UNIQUEMENT le JSON, sans texte avant ni après.
+- N'utilise pas de balises Markdown (pas de ```json).
+- Si un champ est illisible ou absent du document, sa valeur doit être `null`.
+- Ne devine jamais une valeur : si tu n'es pas certain, mets `null`.
+- Les montants sont des nombres (pas des chaînes) : 24.50 et non "24.50".
+- La date doit toujours être au format "YYYY-MM-DD".
