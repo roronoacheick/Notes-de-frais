@@ -53,7 +53,11 @@ async def submit(
     except Exception:
         return _err("Impossible de décoder l'image.")
 
-    image_url = sheets.upload_image_to_drive(image_bytes, filename, media_type)
+    try:
+        image_url = sheets.upload_image_to_drive(image_bytes, filename, media_type)
+    except Exception:
+        image_url = None  # Upload Drive non disponible, on continue sans image
+
     sheets.append_expense({
         "categorie": categorie, "fournisseur": fournisseur, "date": date,
         "montant_ttc": montant_ttc or None, "tva": tva or None,

@@ -1,0 +1,354 @@
+/* ─── VARIABLES ─────────────────────────────────────────────────────────── */
+:root {
+  --bg:         #0F1923;
+  --bg2:        #1A242D;
+  --bg3:        #212D38;
+  --red:        #FF4655;
+  --cyan:       #00D4FF;
+  --green:      #00FFB2;
+  --text:       #ECE8E1;
+  --text2:      #8B978F;
+  --border:     rgba(0, 212, 255, 0.15);
+  --border-red: rgba(255, 70, 85, 0.4);
+  --radius:     2px;
+}
+
+/* ─── RESET ──────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  min-height: 100vh;
+}
+
+/* ─── HEADER ─────────────────────────────────────────────────────────────── */
+header {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border-red);
+  padding: 0 2rem;
+  height: 56px;
+  display: flex;
+  align-items: center;
+}
+
+.header-inner {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 1.1rem;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+
+.logo-sub {
+  font-size: 0.6rem;
+  color: var(--text2);
+  letter-spacing: 0.2em;
+  margin-left: 0.5rem;
+}
+
+.accent-red { color: var(--red); }
+
+.status-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.65rem;
+  color: var(--green);
+  letter-spacing: 0.15em;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  background: var(--green);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+
+/* ─── MAIN ───────────────────────────────────────────────────────────────── */
+main {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ─── PANELS ─────────────────────────────────────────────────────────────── */
+.panel {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-top: 2px solid var(--red);
+  padding: 1.5rem;
+}
+
+.panel-label {
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: var(--red);
+  margin-bottom: 1.2rem;
+}
+
+/* ─── DROP ZONE ──────────────────────────────────────────────────────────── */
+.drop-zone {
+  border: 1px dashed var(--border);
+  background: var(--bg3);
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  overflow: hidden;
+}
+
+.drop-zone:hover,
+.drop-zone.drag-over {
+  border-color: var(--cyan);
+  background: rgba(0, 212, 255, 0.04);
+}
+
+.drop-zone.has-preview .drop-content { display: none; }
+
+.drop-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 2rem;
+  text-align: center;
+}
+
+.drop-icon {
+  font-size: 2.5rem;
+  color: var(--cyan);
+  opacity: 0.4;
+}
+
+.drop-title {
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+  color: var(--text);
+}
+
+.drop-sub {
+  font-size: 0.65rem;
+  color: var(--text2);
+  letter-spacing: 0.1em;
+}
+
+#file-input { display: none; }
+
+.btn-upload {
+  margin-top: 0.5rem;
+  padding: 0.5rem 1.5rem;
+  background: transparent;
+  border: 1px solid var(--cyan);
+  color: var(--cyan);
+  font-family: inherit;
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.btn-upload:hover {
+  background: var(--cyan);
+  color: var(--bg);
+}
+
+.preview-img {
+  width: 100%;
+  max-height: 320px;
+  object-fit: contain;
+}
+
+.hidden { display: none; }
+
+/* ─── SCAN INDICATOR ─────────────────────────────────────────────────────── */
+.scan-indicator {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1rem;
+  color: var(--cyan);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+}
+
+.scan-indicator.htmx-request { display: flex; }
+
+.scan-bar {
+  width: 100%;
+  height: 2px;
+  background: var(--bg3);
+  position: relative;
+  overflow: hidden;
+}
+
+.scan-bar::after {
+  content: '';
+  position: absolute;
+  height: 100%;
+  width: 40%;
+  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+  animation: scan 1.2s linear infinite;
+}
+
+@keyframes scan {
+  from { left: -40%; }
+  to   { left: 100%; }
+}
+
+/* ─── BUTTONS ────────────────────────────────────────────────────────────── */
+.btn-analyze {
+  margin-top: 1rem;
+  width: 100%;
+  padding: 0.85rem;
+  background: var(--red);
+  border: none;
+  color: white;
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: bold;
+  letter-spacing: 0.2em;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+.btn-analyze:hover  { background: #e03040; }
+.btn-analyze:active { transform: scale(0.99); }
+
+/* ─── FORM (retourné par le serveur) ─────────────────────────────────────── */
+form[hx-post="/api/submit"] {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.field label {
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  color: var(--text2);
+  text-transform: uppercase;
+}
+
+.field input,
+.field select {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.85rem;
+  padding: 0.55rem 0.8rem;
+  outline: none;
+  transition: border-color 0.2s;
+  border-radius: var(--radius);
+  width: 100%;
+}
+
+.field input:focus,
+.field select:focus {
+  border-color: var(--cyan);
+}
+
+.field input[readonly] {
+  color: var(--text2);
+  cursor: default;
+}
+
+.field select option {
+  background: var(--bg2);
+}
+
+form[hx-post="/api/submit"] button[type="submit"] {
+  margin-top: 0.5rem;
+  padding: 0.85rem;
+  background: var(--red);
+  border: none;
+  color: white;
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: bold;
+  letter-spacing: 0.2em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+form[hx-post="/api/submit"] button[type="submit"]:hover { background: #e03040; }
+
+/* ─── SUCCESS / ERROR ────────────────────────────────────────────────────── */
+.success-box {
+  border: 1px solid var(--green);
+  background: rgba(0, 255, 178, 0.05);
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.success-box p { color: var(--green); letter-spacing: 0.05em; }
+
+.success-box button {
+  align-self: flex-start;
+  margin-top: 0.5rem;
+  padding: 0.5rem 1.5rem;
+  background: transparent;
+  border: 1px solid var(--green);
+  color: var(--green);
+  font-family: inherit;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.success-box button:hover {
+  background: var(--green);
+  color: var(--bg);
+}
+
+.error-box {
+  border: 1px solid var(--red);
+  background: rgba(255, 70, 85, 0.05);
+  padding: 1rem;
+  color: var(--red);
+  letter-spacing: 0.05em;
+}
+
+/* ─── RESPONSIVE ─────────────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  main { padding: 0 1rem; }
+  .logo-sub { display: none; }
+}
