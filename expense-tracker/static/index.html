@@ -3,10 +3,67 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Expense Tracker</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>EXPENSEAI // TACTICAL COMMAND CENTER</title>
+  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+  <link rel="stylesheet" href="/static/style.css" />
 </head>
 <body>
-  <script src="app.js"></script>
+
+  <header>
+    <div class="header-inner">
+      <div class="logo">
+        <span class="accent-red">//</span> EXPENSE<span class="accent-red">AI</span>
+        <span class="logo-sub">TACTICAL COMMAND CENTER</span>
+      </div>
+      <div class="status-badge">
+        <span class="status-dot"></span>
+        SYSTÈME OPÉRATIONNEL
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <section class="panel" id="upload-panel">
+      <div class="panel-label">// ANALYSE DE DOCUMENT</div>
+
+      <form id="upload-form"
+            hx-post="/api/analyze"
+            hx-target="#result"
+            hx-swap="innerHTML"
+            hx-encoding="multipart/form-data"
+            hx-indicator="#scan-indicator">
+
+        <div class="drop-zone" id="drop-zone">
+          <div class="drop-content" id="drop-content">
+            <div class="drop-icon">⬡</div>
+            <p class="drop-title">DÉPOSER LE JUSTIFICATIF</p>
+            <p class="drop-sub">JPEG · PNG · WEBP · MAX 5 MB</p>
+            <input type="file" name="file" id="file-input" accept="image/jpeg,image/png,image/webp" />
+            <label for="file-input" class="btn-upload">CHARGER FICHIER</label>
+          </div>
+          <img id="preview" class="preview-img hidden" alt="Prévisualisation" />
+        </div>
+
+        <div id="scan-indicator" class="scan-indicator htmx-indicator">
+          <div class="scan-bar"></div>
+          <span>ANALYSE IA EN COURS...</span>
+        </div>
+
+        <button type="submit" class="btn-analyze">
+          <span>◈</span> ANALYSER LE DOCUMENT
+        </button>
+
+      </form>
+    </section>
+
+    <section class="panel" id="result-panel">
+      <div class="panel-label">// DONNÉES EXTRAITES</div>
+      <div id="result"></div>
+    </section>
+
+  </main>
+
+  <script src="/static/app.js"></script>
 </body>
 </html>

@@ -23,8 +23,12 @@ class GoogleSheetsClient:
         self.drive = build("drive", "v3", credentials=creds)
 
     def upload_image_to_drive(self, image_bytes: bytes, filename: str, media_type: str) -> str:
+        folder_id = os.environ.get("GOOGLE_DRIVE_FOLDER_ID")
         media = MediaIoBaseUpload(io.BytesIO(image_bytes), mimetype=media_type, resumable=False)
-        file = (self.drive.files().create(body={"name": filename}, media_body=media, fields="id").execute())
+        body = {"name": filename}
+        if folder_id:
+            body["parents"] = [folder_id]
+        file = (self.drive.files().create(body=body, media_body=media, fields="id").execute())
         file_id = file["id"]
 
         self.drive.permissions().create(fileId=file_id, body={"type": "anyone", "role": "reader"}).execute()

@@ -14,7 +14,8 @@ Retourne UNIQUEMENT un objet JSON valide respectant exactement la structure suiv
   "numero_document": "Numéro de ticket ou facture",
   "mode_paiement": "carte",
   "description": "Description courte de la dépense",
-  "note": null
+  "note": null,
+  "confiance": "haute"
 }
  
 ## Détail des champs
@@ -34,6 +35,7 @@ Retourne UNIQUEMENT un objet JSON valide respectant exactement la structure suiv
 | mode_paiement       | string  | Une des valeurs : "carte", "especes", "virement", "autre", null        |
 | description         | string  | Courte description du contenu de la dépense (ex : "Déjeuner client")  |
 | note                | string  | Toute information utile non couverte par les autres champs. null sinon |
+| confiance           | string  | Ton niveau de confiance global sur l'extraction : "haute", "moyenne" ou "faible" |
  
 ## Règles strictes
  
